@@ -11,6 +11,16 @@ class Services extends StatefulWidget {
 }
 
 class _ServicesState extends State<Services> {
+  List _cities = [
+    "Cluj-Napoca",
+    "Bucuresti",
+    "Timisoara",
+    "Brasov",
+    "Constanta"
+  ];
+
+  List<DropdownMenuItem<String>> _dropDownMenuItems;
+  String _currentCity;
   List<Standings> _standingsList = List<Standings>();
   List<Tables> _tableList = List<Tables>();
 
@@ -46,6 +56,8 @@ Product _parseJsonForCrossword(String jsonString) {
 
   @override
   void initState() {
+    _dropDownMenuItems = getDropDownMenuItems();
+    _currentCity = _dropDownMenuItems[0].value;
     loadProduct("Arsenal").then((value) {
       setState(() {
         _standingsList.addAll(value.standings);
@@ -65,87 +77,102 @@ Product _parseJsonForCrossword(String jsonString) {
         body: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'Equipo',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                scrollDirection: Axis.vertical,
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Text("Please choose your city: "),
+                    new Container(
+                      padding: new EdgeInsets.all(16.0),
                     ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'PJ',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    new DropdownButton(
+                      value: _currentCity,
+                      items: _dropDownMenuItems,
+                      onChanged: changedDropDownItem,
                     ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'G',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    DataTable(
+                      columns: const <DataColumn>[
+                        DataColumn(
+                          label: Text(
+                            'Equipo',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'PJ',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'G',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'E',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'P',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'GF',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'GE',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'PTS',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'GD',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ],
+                      rows: _standingsList[0]
+                          .table // Loops through dataColumnText, each iteration assigning the value to element
+                          .map(
+                            ((element) => DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(Text(element.position.toString() +
+                                        ". " +
+                                        element.team
+                                            .name)), //Extracting from Map element the value
+                                    DataCell(Text(element.pj.toString())),
+                                    DataCell(Text(element.w.toString())),
+                                    DataCell(Text(element.d.toString())),
+                                    DataCell(Text(element.l.toString())),
+                                    DataCell(Text(element.goalsFor.toString())),
+                                    DataCell(
+                                        Text(element.goalsAgainst.toString())),
+                                    DataCell(Text(element.points.toString())),
+                                    DataCell(Text(element.gd.toString())),
+                                  ],
+                                )),
+                          )
+                          .toList(),
                     ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'E',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'P',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'GF',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'GE',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'PTS',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'GD',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ],
-                rows: _standingsList[0]
-                    .table // Loops through dataColumnText, each iteration assigning the value to element
-                    .map(
-                      ((element) => DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text(element.position.toString() +
-                                  ". " +
-                                  element.team
-                                      .name)), //Extracting from Map element the value
-                              DataCell(Text(element.pj.toString())),
-                              DataCell(Text(element.w.toString())),
-                              DataCell(Text(element.d.toString())),
-                              DataCell(Text(element.l.toString())),
-                              DataCell(Text(element.goalsFor.toString())),
-                              DataCell(Text(element.goalsAgainst.toString())),
-                              DataCell(Text(element.points.toString())),
-                              DataCell(Text(element.gd.toString())),
-                            ],
-                          )),
-                    )
-                    .toList(),
-              ),
-            )));
+                  ],
+                ))));
   }
 
   _search() {
@@ -169,5 +196,19 @@ Product _parseJsonForCrossword(String jsonString) {
         },
       ),
     );
+  }
+
+  List<DropdownMenuItem<String>> getDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String city in _cities) {
+      items.add(new DropdownMenuItem(value: city, child: new Text(city)));
+    }
+    return items;
+  }
+
+  void changedDropDownItem(String selectedCity) {
+    setState(() {
+      _currentCity = selectedCity;
+    });
   }
 }
