@@ -1,4 +1,5 @@
-import 'package:implementacion/screens/take_picture.dart';
+import 'package:implementacion/screens/services.dart';
+
 import 'package:flutter/material.dart';
 
 import 'view_pic_screen.dart';
@@ -16,12 +17,12 @@ class _TabsScreenState extends State<TabsScreen> {
       'title': 'Take a Pic',
     },
     {
-      'page': TakePicture(),
-      'title': 'Your Images',
-    },
-    {
       'page': VideoRecorder(),
       'title': 'Take Video',
+    },
+    {
+      'page': Services(),
+      'title': 'Soccer',
     },
   ];
   int _selectedPageIndex = 0;
@@ -54,13 +55,13 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.camera),
-            title: Text('Camera'),
+            icon: Icon(Icons.videocam),
+            title: Text('Video'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.videocam),
-            title: Text('Video'),
+            icon: Icon(Icons.account_balance_wallet),
+            title: Text('Services'),
           ),
         ],
       ),

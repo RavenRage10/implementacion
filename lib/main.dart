@@ -1,4 +1,5 @@
-import 'package:implementacion/screens/take_picture.dart';
+import 'package:implementacion/screens/services.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,8 +37,8 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (ctx) => TabsScreen(),
             ViewPicScreen.routeName: (ctx) => ViewPicScreen(),
-            TakePicture.routeName: (ctx) => TakePicture(),
-            VideoRecorder.routeName: (ctx) => VideoRecorder()
+            VideoRecorder.routeName: (ctx) => VideoRecorder(),
+            Services.routeName: (ctx) => Services()
           },
         ),
       ),
